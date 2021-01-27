@@ -72,22 +72,26 @@ function logout() {
     })
 }
 
-function openPage(url) {
 
-    if (timer != null) {
-        clearTimeout(timer);
+window.addEventListener("popstate", function() {
+    var url = location.href;
+    openPagePushState(url);
+})
+
+function openPagePushState(url) {
+    if(timer !== null) {
+      clearTimeout(timer);
     }
-
-    
-    if (url.indexOf("?") == -1) {
-        url+="?";
+    if(url.indexOf("?") === -1) {
+      url = url + "?";
     }
-
     var encodedUrl = encodeURI(url + "&userLoggedIn=" + userLoggedIn);
     $("#mainContent").load(encodedUrl);
-    // console.log(4) 
-    
     $("body").scrollTop(0);
+}
+
+function openPage(url) {
+    openPagePushState(url);
     history.pushState(null, null, url);
 }
 
